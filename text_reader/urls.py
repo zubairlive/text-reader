@@ -15,16 +15,20 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth import views
 from django.urls import path
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 
-from text_reader.apps.core import views
+from text_reader.apps.core import views as core_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    url(r'^$', views.index, name='index'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+
+    url(r'^$', core_views.index, name='index'),
 
     # Include apps API urls without prefix so that we can preserve the
     # patterns for django "{app_namespace}/" and DRF "api/v1/{app_namespace}"

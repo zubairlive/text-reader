@@ -1,0 +1,2 @@
+# Packages required for testing
+-r base.txt

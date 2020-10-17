@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'text_reader.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'text_reader.settings.local')
 
 application = get_wsgi_application()

@@ -88,6 +88,8 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
+
+                'text_reader.apps.core.context_processors.site_processor',
             ],
         },
     },
@@ -182,7 +184,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
-# SITE_ID = 1
+SITE_ID = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

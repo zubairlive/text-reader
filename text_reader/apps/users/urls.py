@@ -8,5 +8,5 @@ urlpatterns = [
 
 # Add API urls here
 urlpatterns += [
-    url(r'^api/', include('text_reader.apps.users.api.urls', namespace='api')),
+    # url(r'^api/', include('text_reader.apps.users.api.urls', namespace='api')),
 ]

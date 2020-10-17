@@ -1,0 +1,89 @@
+# .gitignore for current project
+### Files private to developers
+edly_panel/settings/private.py
+
+### Python artifacts
+*.pyc
+
+### Project local files and directories
+db.sqlite3
+edly_panel/static/
+edly_panel/staticfiles/
+edly_panel/site_media/
+pytest-results/
+logs/*
+
+### Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+###  Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+### Editor and IDE artifacts
+*~
+*.swp
+*.orig
+/nbproject
+.idea/
+.redcar/
+codekit-config.json
+.pycharm_helpers/
+
+### NFS artifacts
+.nfs*
+
+### OS X artifacts
+*.DS_Store
+.AppleDouble
+:2e_*
+:2e#
+
+### Internationalization artifacts
+*.mo
+*.po
+*.prob
+*.dup
+!django.po
+!django.mo
+!djangojs.po
+!djangojs.mo
+
+### Testing artifacts
+.testids/
+.noseids
+
+### Installation artifacts
+*.egg-info
+.pip_download_cache/
+.prereqs_cache
+.vagrant/
+node_modules
+.bundle/
+bin/
+
+### Logging artifacts
+chromedriver.log
+ghostdriver.log
+
+### Celery artifacts ###
+celerybeat-schedule
+
+### Other artifacts
+database.sqlite
+flushdb.sh
+build
+/src/
+\#*\#
+.env/
+autodeploy.properties
+.ws_migrations_complete

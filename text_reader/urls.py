@@ -18,4 +18,8 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Include apps API urls without prefix so that we can preserve the
+    # patterns for django "{app_namespace}/" and DRF "api/v1/{app_namespace}"
+    url(r'', include('text_reader.apps.users.urls', namespace='users')),
 ]

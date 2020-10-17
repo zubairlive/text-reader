@@ -25,8 +25,7 @@ from text_reader.apps.core import views as core_views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('accounts/', include('django.contrib.auth.urls')),
 
     url(r'^$', core_views.index, name='index'),
 

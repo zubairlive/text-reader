@@ -1,15 +1,15 @@
 # .gitignore for current project
 ### Files private to developers
-edly_panel/settings/private.py
+text_reader/settings/private.py
 
 ### Python artifacts
 *.pyc
 
 ### Project local files and directories
 db.sqlite3
-edly_panel/static/
-edly_panel/staticfiles/
-edly_panel/site_media/
+text_reader/static/
+text_reader/staticfiles/
+text_reader/site_media/
 pytest-results/
 logs/*
 

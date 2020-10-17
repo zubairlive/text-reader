@@ -1,0 +1,191 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .object-tools li {
+        height: auto;
+    }
+
+    #report-form {
+      padding: 6px 12px 4px;
+      margin: -7px 0 0;
+      border-radius: 4px;
+      background: #f8f8f8;
+      border: 1px solid #eeeeee;
+    }
+
+    #from_date,
+    #to_date {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #report-form label {
+      margin: 5px 10px 5px 0;
+    }
+
+    #report-form select {
+      height: 26px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .mau-report-generate-button {
+      font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",
+        Verdana, Arial, sans-serif;
+        font-size: 11px;
+      line-height: 20px;
+      border: none;
+      border-radius: 15px;
+      float: right;
+      padding: 3px 12px;
+      background: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    .mau-report-generate-button:hover {
+      background-color: #417690;
+      cursor: pointer;
+    }
+    .mau-report-generate-button:disabled {
+      background-color: #999;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+    #changelist {
+        overflow: hidden;
+    }
+
+    @media(max-width: 1200px) {
+        .object-tools {
+            margin: 0 0  20px;
+        }
+    }
+  </style>
+{% endblock %}
+
+{% block object-tools-items %}
+{% if user.is_superuser %}
+<li>
+  <form method="POST" id="report-form">
+    {% csrf_token %}
+    <label for="to_date">From:</label>
+    <div id="from_date">
+      <select class="custom-select custom-select-sm" name="from_month">
+        {% for month in months %}
+          {% if month.month_number < starting_month %}
+            <option value={{ month.month_number }} disabled>{{ month.month_name }}</option>
+          {% else %}
+            <option value={{ month.month_number }}>{{ month.month_name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      &nbsp;
+      <select class="custom-select custom-select-sm" name="from_year">
+        {% for year in years %}
+          {% if year == starting_year %}
+            <option value={{ year }} selected>{{ year }}</option>
+          {% else %}
+            <option value={{ year }}>{{ year }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    &nbsp;
+    <label for="to_date">To:</label>
+    <div id="to_date">
+      <select name="to_month">
+        {% for month in months %}
+          {% if month.month_number > current_month %}
+            <option value={{ month.month_number }} disabled>{{ month.month_name }}</option>
+          {% else %}
+            <option value={{ month.month_number }}>{{ month.month_name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      &nbsp;
+      <select name="to_year">
+        {% for year in years %}
+          {% if year == current_year %}
+            <option value={{ year }} selected>{{ year }}</option>
+          {% else %}
+            <option value={{ year }}>{{ year }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    &nbsp;&nbsp;
+
+    <button formaction="{% url 'admin:maus-history' %}" class="mau-report-generate-button">
+      Generate MAU's report
+    </button>
+
+    <p class="error" hidden>Start date can not be greater than end date</p>
+  </form>
+</li>
+{% endif %}
+{{ block.super }}
+
+<script type="text/javascript">
+  django.jQuery(document).ready(function () {
+    django.jQuery('select').change(function () {
+      var selectedFromYear = django.jQuery('select[name="from_year"]').children("option:selected").val();
+      var selectedToYear = django.jQuery('select[name="to_year"]').children("option:selected").val();
+      adjust_year_values(selectedFromYear, selectedToYear);
+      adjust_month_values('from_month', selectedFromYear);
+      adjust_month_values('to_month', selectedToYear);
+      var selectedFromMonth = django.jQuery('select[name="from_month"]').children("option:selected").val();
+      var selectedToMonth = django.jQuery('select[name="to_month"]').children("option:selected").val();
+      var selectedFromDate = new Date(selectedFromYear, selectedFromMonth - 1);
+      var selectedToDate = new Date(selectedToYear, selectedToMonth - 1);
+      if (selectedFromDate > selectedToDate) {
+        django.jQuery('.mau-report-generate-button').prop('disabled', true);
+        django.jQuery('.error').show();
+      } else {
+        django.jQuery('.mau-report-generate-button').prop('disabled', false);
+        django.jQuery('.error').hide();
+      }
+    });
+
+    function adjust_month_values(month_dropdown, selectedYear) {
+      if (selectedYear == {{ starting_year }}) {
+        django.jQuery(`select[name=${month_dropdown}] option`).each(function() {
+          if(django.jQuery(this).val() < {{ starting_month }}) {
+            django.jQuery(this).prop('disabled', true);
+          } else
+            django.jQuery(this).prop('disabled', false);
+        });
+      } else if (selectedYear == {{ current_year }}) {
+        django.jQuery(`select[name=${month_dropdown}] option`).each(function() {
+          if(django.jQuery(this).val() > {{ current_month }}) {
+            django.jQuery(this).prop('disabled', true);
+          } else
+            django.jQuery(this).prop('disabled', false);
+        });
+      } else {
+        django.jQuery(`select[name=${month_dropdown}] option`).each(function() {
+          django.jQuery(this).prop('disabled', false);
+        });
+      }
+      if (django.jQuery(`select[name=${month_dropdown}]`).children('option:selected').prop('disabled'))
+        django.jQuery(`select[name=${month_dropdown}]`).children('option:enabled').eq(0).prop('selected',true);
+    }
+
+    function adjust_year_values(selectedFromYear, selectedToYear) {
+      django.jQuery('select[name="to_year"] option').each(function() {
+        django.jQuery(this).prop('disabled', django.jQuery(this).val() < selectedFromYear);
+      });
+      django.jQuery('select[name="from_year"] option').each(function() {
+          django.jQuery(this).prop('disabled', django.jQuery(this).val() > selectedToYear);
+        });
+    }
+  });
+</script>
+
+{% endblock %}

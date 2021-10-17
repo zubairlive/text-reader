@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
 PROJECT_APPS = [
     'text_reader.apps.core',
     'text_reader.apps.users',
+    'text_reader.apps.textreader',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS

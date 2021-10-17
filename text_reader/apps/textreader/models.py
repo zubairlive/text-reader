@@ -24,6 +24,17 @@ def document_file_path(instance, filename):
     return fullname
 
 
+def validate_document(value):
+    """
+    Validate the uploaded files.
+    """
+    valid_extensions = ['.png', ]
+
+    ext = os.path.splitext(value.name)[1]
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Please upload a valid png file')
+
+
 class Document(TimeStampedModel):
 
     description = models.CharField(

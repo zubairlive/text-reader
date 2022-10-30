@@ -34,3 +34,5 @@ migrate:
 	python manage.py migrate --noinput
 
 validate: quality test
+
+test: test
